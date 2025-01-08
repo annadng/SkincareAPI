@@ -90,7 +90,7 @@ app.get('/products/type/:type', (req, res) => {
 // Get product by skin type
 app.get('/products/skin_type/:skin_type', (req, res) => {
   const product = products.filter((p) => p.skin_type.includes(req.params.skin_type));
-  if (product) {
+  if (product.length > 0) {
     res.json(product);
   } else {
     res.status(404).json({ message: 'Product not found' });
@@ -100,7 +100,7 @@ app.get('/products/skin_type/:skin_type', (req, res) => {
 // Get product by ingredient
 app.get('/products/ingredients/:ingredient', (req, res) => {
   const product = products.filter((p) => p.ingredients.includes(req.params.ingredient));
-  if (product) {
+  if (product.length > 0) {
     res.json(product);
   } else {
     res.status(404).json({ message: 'Product not found' });
@@ -120,7 +120,7 @@ app.get('/products/brand/:brand', (req, res) => {
 // Get product by skin concern
 app.get('/products/skin_concerns/:skin_concern', (req, res) => {
   const product = products.filter((p) => p.skin_concerns.includes(req.params.skin_concern));
-  if (product) {
+  if (product.length > 0) {
     res.json(product);
   } else {
     res.status(404).json({ message: 'Product not found' });
@@ -145,9 +145,14 @@ app.post('/products', (req, res) => {
   const newProduct = {
     id: products.length + 1,
     name: req.body.name,
+    country: req.body.country,
+    brand: req.body.brand,
     type: req.body.type,
+    ingredients: req.body.ingredients || [],
+    skin_type: req.body.skin_type || [],
+    skin_concerns: req.body.skin_concerns || [],
     price: req.body.price,
-    details: req.body.details,
+    link: req.body.link,
   };
   products.push(newProduct);
   res.status(201).json(newProduct);
@@ -167,5 +172,5 @@ app.delete('/products/:id', (req, res) => {
 
 app.listen(
     PORT, 
-    () => console.log('its alive on ${PORT}')
+    () => console.log(`its alive on ${PORT}`)
 )
